@@ -1,0 +1,44 @@
+# Gradle
+.gradle/
+build/
+*/build/
+
+# Local configuration
+local.properties
+*.iml
+.idea/
+.idea/caches/
+.idea/libraries/
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# Logs
+*.log
+
+# Android
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Generated files
+*.apk
+*.ap_
+*.dex
+*.class
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Keystore (don’t commit your signing keys)
+*.jks
+*.keystore
+
+# Room schema (optional, if auto-export enabled)
+schemas/
+
+# Custom
+README.txt
+Requirements.txt
+PlanWebApp.txt - Shortcut

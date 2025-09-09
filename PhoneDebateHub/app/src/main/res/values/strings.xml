@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PhoneDebateHub</string>
+    <string name="no_debates">No debates yet.</string>
+    <string name="welcome_placeholder">Welcome</string>
+</resources>

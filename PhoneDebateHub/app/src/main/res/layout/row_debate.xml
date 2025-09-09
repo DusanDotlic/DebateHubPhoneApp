@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:textColor="@color/TextColor"
+    android:foreground="?attr/selectableItemBackground"
+    android:background="@android:color/transparent">
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Debate title"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="@color/TextColor"/>
+
+    <TextView
+        android:id="@+id/textSubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Updated just now"
+        android:textSize="12sp"
+        android:alpha="0.7"
+        android:paddingTop="4dp"
+        android:textColor="@color/TextColor"/>
+</LinearLayout>

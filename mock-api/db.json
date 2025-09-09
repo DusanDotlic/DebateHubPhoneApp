@@ -1,0 +1,120 @@
+{
+  "debates": [
+    {
+      "id": "1",
+      "title": "AI Ethics",
+      "updatedAt": "2025-09-01T12:00:00Z"
+    },
+    {
+      "id": "2",
+      "title": "Nuclear Energy",
+      "updatedAt": "2025-08-30T09:30:00Z"
+    },
+    {
+      "id": "3",
+      "title": "Crypto Regulation",
+      "updatedAt": "2025-08-29T18:15:00Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "1",
+      "debateId": 1,
+      "author": "Alice",
+      "content": "First!",
+      "createdAt": "2025-09-01T10:00:00Z",
+      "likes": 1,
+      "userLiked": true
+    },
+    {
+      "id": "42bc",
+      "debateId": 1,
+      "author": "You",
+      "content": "Alo",
+      "createdAt": "1757417701715",
+      "likes": 1,
+      "userLiked": true
+    },
+    {
+      "id": "8154",
+      "debateId": 1,
+      "author": "You",
+      "content": "AloBre",
+      "createdAt": "1757417707619",
+      "likes": 0,
+      "userLiked": false
+    },
+    {
+      "id": "408f",
+      "debateId": 1,
+      "author": "You",
+      "content": "E",
+      "createdAt": "1757418726791",
+      "likes": 0,
+      "userLiked": false
+    },
+    {
+      "id": "f5ce",
+      "debateId": 1,
+      "author": "You",
+      "content": "d",
+      "createdAt": "1757419054280",
+      "likes": 0,
+      "userLiked": false
+    },
+    {
+      "id": "d5e4",
+      "debateId": 3,
+      "author": "You",
+      "content": "A",
+      "createdAt": "1757419063289",
+      "likes": 1,
+      "userLiked": true
+    },
+    {
+      "id": "30c9",
+      "debateId": 3,
+      "author": "You",
+      "content": "A",
+      "createdAt": "1757419126604",
+      "likes": 0,
+      "userLiked": false
+    },
+    {
+      "id": "bcc4",
+      "debateId": 3,
+      "author": "You",
+      "content": "ALLOOOOO",
+      "createdAt": "1757419133945",
+      "likes": 1,
+      "userLiked": true
+    },
+    {
+      "id": "08c7",
+      "debateId": 1,
+      "author": "You",
+      "content": "kažem ja",
+      "createdAt": "1757424711727",
+      "likes": 0,
+      "userLiked": false
+    },
+    {
+      "id": "be9d",
+      "debateId": 1,
+      "author": "You",
+      "content": "Alo",
+      "createdAt": "1757429070118",
+      "likes": 0,
+      "userLiked": false
+    },
+    {
+      "id": "3cc0",
+      "debateId": 2,
+      "author": "You",
+      "content": "message",
+      "createdAt": "1757430455632",
+      "likes": 0,
+      "userLiked": false
+    }
+  ]
+}
