@@ -4,16 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Background"
+    android:background="@color/Primary"
     android:padding="24dp">
 
-    <EditText
+    <!--    <EditText-->
+    <!--        android:id="@+id/inputName"-->
+    <!--        android:layout_width="357dp"-->
+    <!--        android:layout_height="55dp"-->
+    <!--        android:layout_marginTop="316dp"-->
+    <!--        android:backgroundTint="@color/Muted"-->
+    <!--        android:hint="Enter your name"-->
+    <!--        android:imeOptions="actionDone"-->
+    <!--        android:textColor="@color/TextColor"-->
+    <!--        android:textColorHint="@color/Muted"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.0"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/inputName"
-        android:layout_width="357dp"
-        android:layout_height="55dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="316dp"
-        android:backgroundTint="@color/Muted"
-        android:hint="Enter your name"
+        android:hint="Enter your name..."
         android:imeOptions="actionDone"
         android:textColor="@color/TextColor"
         android:textColorHint="@color/Muted"
@@ -26,10 +40,10 @@
         android:id="@+id/buttonLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:textColor="@color/TextColor"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/ButtonBackground"
         android:text="Continue"
+        android:textColor="@color/TextColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

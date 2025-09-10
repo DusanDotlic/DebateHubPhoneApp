@@ -2,32 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/Primary"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:textColor="@color/TextColor"
-    android:textColorHint="@color/Muted"
-    android:background="@color/Background">
+    android:padding="16dp">
 
     <!-- Welcome line -->
     <TextView
         android:id="@+id/textWelcome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
         android:text="@string/welcome_placeholder"
-        android:textColor="@color/TextColor"
         android:textAppearance="?attr/textAppearanceTitleMedium"
-        android:paddingBottom="8dp" />
+        android:textColor="@color/TextColor" />
 
     <!-- EMPTY STATE (the Activity uses this id) (For progress bar)-->
     <TextView
         android:id="@+id/textEmpty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/no_debates"
         android:gravity="center"
-        android:visibility="gone"
         android:padding="16dp"
-        android:textAppearance="?attr/textAppearanceBodyMedium" />
+        android:text="@string/no_debates"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:visibility="gone" />
 
 
     <ProgressBar
@@ -40,10 +38,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerDebates"
-        android:textColorHint="@color/Muted"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:clipToPadding="false" />
+        android:clipToPadding="false"
+        android:textColor="@color/TextColor"
+        android:textColorHint="@color/TextColor"/>
 
 </LinearLayout>

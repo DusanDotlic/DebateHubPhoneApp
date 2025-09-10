@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.phonedebatehub.R
-import com.example.phonedebatehub.data.Repository
+import com.example.phonedebatehub.data.local.Repository
 import com.example.phonedebatehub.ui.detail.DebateDetailActivity
 import com.example.phonedebatehub.util.IntentKeys
 import kotlinx.coroutines.launch
@@ -50,7 +50,7 @@ class DebatesActivity : AppCompatActivity() {
 
 // Load data
         lifecycleScope.launch {
-            val repo = com.example.phonedebatehub.data.Repository(this@DebatesActivity)
+            val repo = com.example.phonedebatehub.data.local.Repository(this@DebatesActivity)
             try {
                 progress.visibility = View.VISIBLE
                 emptyView.visibility = View.GONE

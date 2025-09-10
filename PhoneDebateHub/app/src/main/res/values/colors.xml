@@ -4,6 +4,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="ButtonBackground">#3a78ff</color>
     <color name="TextColor">#DFE8FF</color>
-    <color name="Background">#0b1220</color>
-    <color name="Muted">#2b3650</color>
+    <color name="Muted">#5d6b84</color>
+    <color name="Primary">#0b1220</color>
+    <color name="TextColorDark">#0E1B2B</color>
+    <color name="Surface">#121a2b</color>
+    <color name="Accent">#3a78ff</color>
 </resources>

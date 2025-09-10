@@ -1,42 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeRefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:textColorHint="@color/Muted"
-    android:background="@color/Background">
+    android:paddingTop="8dp">
 
+    <!-- Keep this TextView: DebateDetailFragment sets its text via R.id.textHeader -->
     <TextView
         android:id="@+id/textHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Messages"
         android:textStyle="bold"
-        android:textColor="@color/TextColor"
         android:textSize="18sp"
-        android:paddingBottom="8dp" />
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="16dp"
+        android:textColor="@color/TextColor" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerMessages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:paddingTop="4dp"
         android:clipToPadding="false" />
 
-    <EditText
-        android:id="@+id/inputMessage"
-        android:layout_width="match_parent"
-        android:layout_height="57dp"
-        android:backgroundTint="@color/Muted"
-        android:hint="Type your message..."
-        android:textColorHint="@color/Muted" />
-
-    <Button
-        android:id="@+id/buttonSend"
+    <!-- Input area -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Send"
-        android:textColor="@color/TextColor"
-        android:backgroundTint="@color/ButtonBackground"/>
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:background="@color/Surface">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColorHint="@color/TextColor">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/message_input_placeholder"
+                android:imeOptions="actionSend"
+                android:maxLines="4"
+                android:minLines="1"
+                android:textColorHint="@color/Muted"
+                android:textColor="@color/TextColor"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonSend"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Send"
+            app:cornerRadius="20dp"
+            app:iconPadding="8dp"
+            app:backgroundTint="@color/Primary"
+            android:textColor="@color/TextColor" />
+    </LinearLayout>
+
 </LinearLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

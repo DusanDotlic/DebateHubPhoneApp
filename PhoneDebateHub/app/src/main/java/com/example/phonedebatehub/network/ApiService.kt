@@ -43,7 +43,7 @@ interface ApiService {
         @Path("id") id: String,
         @Body body: Map<String, @JvmSuppressWildcards Any>
     ): MessageDto
-    
+
 /*  //Creating debates
     @POST("debates")
     suspend fun postDebate(@Body body: DebateCreateDto): DebateDto

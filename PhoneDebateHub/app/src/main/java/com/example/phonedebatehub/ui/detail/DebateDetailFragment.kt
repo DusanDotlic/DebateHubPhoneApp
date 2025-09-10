@@ -9,11 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.phonedebatehub.R
-import com.example.phonedebatehub.data.Repository
+import com.example.phonedebatehub.data.local.Repository
 import com.example.phonedebatehub.util.IntentKeys
 import kotlinx.coroutines.launch
 import androidx.core.os.bundleOf
 import com.example.phonedebatehub.data.model.Message
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 
 class DebateDetailFragment : Fragment(R.layout.fragment_debate_detail) {
@@ -23,8 +24,8 @@ class DebateDetailFragment : Fragment(R.layout.fragment_debate_detail) {
         fun newInstance(debateId: Long, debateTitle: String): DebateDetailFragment {
             return DebateDetailFragment().apply {
                 arguments = bundleOf(
-                    com.example.phonedebatehub.util.IntentKeys.DEBATE_ID to debateId,
-                    com.example.phonedebatehub.util.IntentKeys.DEBATE_TITLE to debateTitle
+                    IntentKeys.DEBATE_ID to debateId,
+                    IntentKeys.DEBATE_TITLE to debateTitle
                 )
             }
         }
@@ -33,23 +34,17 @@ class DebateDetailFragment : Fragment(R.layout.fragment_debate_detail) {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_debate_detail, container, false)
-    }
+    ): View = inflater.inflate(R.layout.fragment_debate_detail, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //Fragment is argument-driven, survives process death/rotation with the right data, and doesn’t depend on the Activity’s intent.
-        // Read arguments given via newInstance()
         val debateId = requireArguments().getLong(IntentKeys.DEBATE_ID, -1L)
         val debateTitle = requireArguments().getString(IntentKeys.DEBATE_TITLE) ?: "Debate"
-
 
         view.findViewById<TextView>(R.id.textHeader).text = "Messages • $debateTitle"
 
         val recycler = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerMessages)
         adapter = MessagesAdapter { message ->
-            // Optimistic UI: update this item immediately
-
+            // Optimistic toggle in the list
             val idx = adapter.currentList.indexOfFirst { it.id == message.id }
             if (idx != -1) {
                 val toggled = message.copy(
@@ -61,13 +56,10 @@ class DebateDetailFragment : Fragment(R.layout.fragment_debate_detail) {
                 adapter.submitList(newList)
             }
 
-            // Persist through repo (re-syncs and corrects if server differs)
             viewLifecycleOwner.lifecycleScope.launch {
                 try {
                     val repo = Repository(requireContext())
                     val saved = repo.toggleLike(message.id)
-
-                    // Make sure adapter shows the final saved state
                     val pos = adapter.currentList.indexOfFirst { it.id == saved.id }
                     if (pos != -1) {
                         val fixed = adapter.currentList.toMutableList()
@@ -75,7 +67,6 @@ class DebateDetailFragment : Fragment(R.layout.fragment_debate_detail) {
                         adapter.submitList(fixed)
                     }
                 } catch (t: Throwable) {
-                    // Revert UI on failure
                     val pos = adapter.currentList.indexOfFirst { it.id == message.id }
                     if (pos != -1) {
                         val revert = adapter.currentList.toMutableList()
@@ -91,31 +82,39 @@ class DebateDetailFragment : Fragment(R.layout.fragment_debate_detail) {
             }
         }
         recycler.adapter = adapter
-
         recycler.layoutManager = LinearLayoutManager(requireContext())
         recycler.setHasFixedSize(true)
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        fun load(force: Boolean) = viewLifecycleOwner.lifecycleScope.launch {
             val repo = Repository(requireContext())
             try {
-                // local first
-                val local = repo.getMessages(debateId, forceRefresh = false)
-                adapter.submitList(local)
-
-                // then refresh
+                if (!force) {
+                    val local = repo.getMessages(debateId, forceRefresh = false)
+                    adapter.submitList(local)
+                }
                 val fresh = repo.getMessages(debateId, forceRefresh = true)
                 adapter.submitList(fresh)
             } catch (t: Throwable) {
-                // Silent fail -> keep whatever we have (local or empty)
-                android.widget.Toast.makeText(requireContext(),
-                    "Could not refresh messages: ${t.localizedMessage}", android.widget.Toast.LENGTH_LONG
+                android.widget.Toast.makeText(
+                    requireContext(),
+                    "Could not refresh messages: ${t.localizedMessage}",
+                    android.widget.Toast.LENGTH_LONG
                 ).show()
+            } finally {
+                view.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh).isRefreshing = false
             }
+        }
+
+        // initial load
+        load(force = false)
+
+        // swipe to refresh
+        view.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh).setOnRefreshListener {
+            load(force = true)
         }
 
         val input = view.findViewById<android.widget.EditText>(R.id.inputMessage)
         val sendBtn = view.findViewById<android.widget.Button>(R.id.buttonSend)
-
         sendBtn.setOnClickListener {
             val text = input.text.toString().trim()
             if (text.isNotEmpty()) {
@@ -123,20 +122,20 @@ class DebateDetailFragment : Fragment(R.layout.fragment_debate_detail) {
                     val repo = Repository(requireContext())
                     try {
                         val newMsg = repo.sendMessage(debateId, "You", text)
-                        // Update UI
-                        val current = (recycler.adapter as MessagesAdapter).currentList.toMutableList()
+                        val current = adapter.currentList.toMutableList()
                         current.add(newMsg)
-                        (recycler.adapter as MessagesAdapter).submitList(current)
+                        adapter.submitList(current)
                         recycler.scrollToPosition(current.size - 1)
                         input.text.clear()
                     } catch (t: Throwable) {
-                        android.widget.Toast.makeText(requireContext(),
-                            "Failed to send: ${t.localizedMessage}", android.widget.Toast.LENGTH_LONG
+                        android.widget.Toast.makeText(
+                            requireContext(),
+                            "Failed to send: ${t.localizedMessage}",
+                            android.widget.Toast.LENGTH_LONG
                         ).show()
                     }
                 }
             }
         }
-
     }
 }

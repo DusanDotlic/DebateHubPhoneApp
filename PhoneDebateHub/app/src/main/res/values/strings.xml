@@ -1,5 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PhoneDebateHub</string>
-    <string name="no_debates">No debates yet.</string>
-    <string name="welcome_placeholder">Welcome</string>
+
+    <!-- Buttons / actions -->
+    <string name="send">Send</string>
+
+    <!-- Accessibility for like button -->
+    <string name="like_button_like">Like message</string>
+    <string name="like_button_unlike">Unlike message</string>
+    <string name="welcome_placeholder">welcome_placeholder</string>
+    <string name="no_debates">There are no debates</string>
+    <string name="message_input_placeholder">Type your message</string>
+
 </resources>

@@ -1,18 +1,17 @@
-package com.example.phonedebatehub.data
+package com.example.phonedebatehub.data.local
 
 import android.content.Context
 import com.example.phonedebatehub.data.local.AppDatabase
 import com.example.phonedebatehub.data.local.MessageEntity
+import com.example.phonedebatehub.network.RetrofitClient
+import com.example.phonedebatehub.data.model.Debate
 import com.example.phonedebatehub.data.mapper.toDomain
 import com.example.phonedebatehub.data.mapper.toEntity
-import com.example.phonedebatehub.data.model.Debate
 import com.example.phonedebatehub.data.model.Message
 import com.example.phonedebatehub.network.MessageCreateDto
-import com.example.phonedebatehub.network.RetrofitClient
-import com.example.phonedebatehub.network.DebateCreateDto
-import com.example.phonedebatehub.data.local.DebateEntity
 
 class Repository(context: Context) {
+
     private val db = AppDatabase.getInstance(context)
     private val api = RetrofitClient.api
 
@@ -22,19 +21,25 @@ class Repository(context: Context) {
     }
 
     suspend fun getMessages(debateId: Long, forceRefresh: Boolean): List<Message> {
+        // 1) local
         if (!forceRefresh) {
             val cached = db.messageDao().listByDebate(debateId)
             if (cached.isNotEmpty()) return cached.map { it.toDomain() }
         }
 
-        val remote = api.getMessages(debateId).map { it.toDomain() }
+        // 2) remote
+        val remoteDtos = api.getMessages(debateId)
 
+        // 3) save RAW epoch to DB (from DTO)
         db.messageDao().deleteForDebate(debateId)
-        db.messageDao().upsertAll(remote.map { it.toEntity() })
-        return remote
+        db.messageDao().upsertAll(remoteDtos.map { it.toEntity() })
+
+        // 4) return formatted domain
+        return remoteDtos.map { it.toDomain() }
     }
 
     suspend fun sendMessage(debateId: Long, author: String, content: String): Message {
+        // send raw epoch to server
         val createBody = MessageCreateDto(
             debateId = debateId,
             author = author,
@@ -44,46 +49,42 @@ class Repository(context: Context) {
             userLiked = false
         )
 
-        val saved = api.postMessage(createBody).toDomain()
+        // server returns a DTO with raw epoch; format for UI, store raw in DB
+        val savedDto = api.postMessage(createBody)
+        val savedDomain = savedDto.toDomain()
 
-        db.messageDao().upsertAll(
-            listOf(
-                MessageEntity(
-                    id = saved.id,
-                    debateId = saved.debateId,
-                    author = saved.author,
-                    content = saved.content,
-                    createdAt = saved.createdAt,
-                    likes = saved.likes,
-                    userLiked = saved.userLiked
-                )
-            )
-        )
-        return saved
+        db.messageDao().upsertAll(listOf(savedDto.toEntity()))
+
+        return savedDomain
     }
 
-    suspend fun toggleLike(messageId: String): Message {       // <-- String
+    suspend fun toggleLike(messageId: String): Message {
         val dao = db.messageDao()
         val current = dao.getById(messageId) ?: error("Message $messageId not found locally")
 
         val nowLiked = !current.userLiked
         val newLikes = (current.likes + if (nowLiked) 1 else -1).coerceAtLeast(0)
 
-        // optimistic local update
-        dao.update(current.copy(likes = newLikes, userLiked = nowLiked))
+        // 1) optimistic
+        val optimistic = current.copy(likes = newLikes, userLiked = nowLiked)
+        dao.update(optimistic)
 
-        // server sync
-        val patched = api.patchMessage(
-            id = messageId,
-            body = mapOf("likes" to newLikes, "userLiked" to nowLiked)
-        )
+        return try {
+            // 2) network
+            val patchedDto = api.patchMessage(
+                id = messageId,
+                body = mapOf("likes" to newLikes, "userLiked" to nowLiked)
+            )
+            // 3) persist RAW epoch
+            val savedEntity = patchedDto.toEntity()
+            dao.update(savedEntity)
 
-        val saved = patched.toEntity()
-        dao.update(saved)
-        return saved.toDomain()
+            // 4) to domain (formatted)
+            savedEntity.toDomain()
+        } catch (t: Throwable) {
+            // revert
+            dao.update(current)
+            throw t
+        }
     }
-
-
-
-
 }

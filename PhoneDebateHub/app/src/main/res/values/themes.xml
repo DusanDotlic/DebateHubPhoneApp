@@ -3,18 +3,6 @@
     <style name="Base.Theme.PhoneDebateHub" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/Background</item>
-        <item name="colorPrimaryVariant">@color/Background</item>
-        <item name="colorOnPrimary">@color/Background</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/Background</item>
-        <item name="colorSecondaryVariant">@color/Background</item>
-        <item name="colorOnSecondary">@color/Background</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/Background</item>
-        <!-- Optional: For light status bar icons on a dark status bar -->
-        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="Theme.PhoneDebateHub" parent="Base.Theme.PhoneDebateHub" />

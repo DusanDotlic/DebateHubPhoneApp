@@ -3,16 +3,13 @@ package com.example.phonedebatehub.ui.detail
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.phonedebatehub.R
 import com.example.phonedebatehub.data.model.Message
-import android.widget.ImageButton
-import androidx.appcompat.widget.AppCompatImageButton
-
 
 class MessagesAdapter(
     private val onLike: (Message) -> Unit
@@ -20,8 +17,10 @@ class MessagesAdapter(
 
     companion object {
         private val DIFF = object : DiffUtil.ItemCallback<Message>() {
-            override fun areItemsTheSame(oldItem: Message, newItem: Message) = oldItem.id == newItem.id
-            override fun areContentsTheSame(oldItem: Message, newItem: Message) = oldItem == newItem
+            override fun areItemsTheSame(oldItem: Message, newItem: Message) =
+                oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: Message, newItem: Message) =
+                oldItem == newItem
         }
     }
 
@@ -33,13 +32,18 @@ class MessagesAdapter(
         private val textLikes = view.findViewById<TextView>(R.id.textLikes)
 
         fun bind(item: Message) {
-            // set all visible fields
+            // content
             author.text = item.author
             content.text = item.content
             created.text = item.createdAt ?: ""
 
-            // likes UI
+            // like UI
             textLikes.text = item.likes.toString()
+            buttonLike.isSelected = item.userLiked
+            buttonLike.contentDescription = itemView.context.getString(
+                if (item.userLiked) R.string.like_button_unlike else R.string.like_button_like)
+
+            // click
             buttonLike.isEnabled = true
             buttonLike.setOnClickListener { onLike(item) }
         }
@@ -52,4 +56,3 @@ class MessagesAdapter(
 
     override fun onBindViewHolder(holder: VH, position: Int) = holder.bind(getItem(position))
 }
-

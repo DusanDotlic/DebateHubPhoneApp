@@ -44,6 +44,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    //Pull to refresh
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     //RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.3.2")
